@@ -1,4 +1,7 @@
 from flask_appbuilder import Model
+from flask_appbuilder.models.mixins import BaseMixin
+from sqlalchemy import Column, Date, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 # from sqlalchemy import Column, Integer, String, ForeignKey
 # from sqlalchemy.orm import relationship
 
@@ -19,7 +22,7 @@ Base = declarative_base()
 metadata = Base.metadata
 
 
-class Category(Base):
+class Category(BaseMixin, Model):
     __tablename__ = 'Category'
 
     Id = Column(Integer, primary_key=True)
@@ -41,6 +44,11 @@ class Customer(Base):
     Country = Column(String(8000))
     Phone = Column(String(8000))
     Fax = Column(String(8000))
+
+
+    def __repr__(self):
+        return self.CompanyName
+
 
 
 class CustomerCustomerDemo(Base):
