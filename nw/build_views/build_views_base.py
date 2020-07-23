@@ -15,7 +15,6 @@ class build_views_base(object):
         self._result += self.generate_module_imports()
 
         for each_table in tables.items():
-            print(each_table)
             each_result = self.process_each_table(each_table[1])
             self._result += each_result
         
@@ -26,11 +25,11 @@ class build_views_base(object):
 
     def process_each_table(self, each_table):
         table_name = each_table.name
+        print("process_each_table: " + table_name)
         if (table_name.startswith("ZZab_")):
             return "# skip admin table: " + table_name + "\n"
         else:
             table_view_class_definition = ""
-            print("processing table: " + table_name)
             table_view_class_definition += self.generate_class_for_table(
                 each_table)
             return table_view_class_definition + "\n\n"
