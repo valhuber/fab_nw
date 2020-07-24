@@ -1,63 +1,61 @@
-from flask import render_template
+# default view.py
+
+from flask_appbuilder import ModelView
 from flask_appbuilder.models.sqla.interface import SQLAInterface
-from flask_appbuilder import ModelView, ModelRestApi
-
 from . import appbuilder, db
+from .models import *
 
-from .models import Customer
-
-class CustomerView(ModelView):
-    datamodel = SQLAInterface(Customer)
-
-appbuilder.add_view(
-    CustomerView,
-    "Customer List",
-    icon="fa-folder-open-o",
-    category="Sales",
-    category_icon='fa-envelope'
-)
-
-"""
-    Create your Model based REST API::
-
-    class MyModelApi(ModelRestApi):
-        datamodel = SQLAInterface(MyModel)
-
-    appbuilder.add_api(MyModelApi)
+# skip admin table: ab_permission
+# skip admin table: ab_view_menu
+# skip admin table: ab_permission_view_role
+# skip admin table: ab_role
+# skip admin table: ab_permission_view
+# skip admin table: ab_user_role
+# skip admin table: ab_user
+# skip admin table: ab_register_user
 
 
-    Create your Views::
+
+class CategoryModelView(ModelView):
+   datamodel = SQLAInterface(Category)
+   list_columns = ["CategoryName", "Description"]
+   show_columns = ["CategoryName", "Description", "Id"]
 
 
-    class MyModelView(ModelView):
-        datamodel = SQLAInterface(MyModel)
 
 
-    Next, register your Views::
+
+class CustomerModelView(ModelView):
+   datamodel = SQLAInterface(Customer)
+   list_columns = ["CompanyName", "ContactName", "ContactTitle", "Address"]
+   show_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
 
 
-    appbuilder.add_view(
-        MyModelView,
-        "My View",
-        icon="fa-folder-open-o",
-        category="My Category",
-        category_icon='fa-envelope'
-    )
-"""
-
-"""
-    Application wide 404 error handler
-"""
 
 
-@appbuilder.app.errorhandler(404)
-def page_not_found(e):
-    return (
-        render_template(
-            "404.html", base_template=appbuilder.base_template, appbuilder=appbuilder
-        ),
-        404,
-    )
+
+class OrderModelView(ModelView):
+   datamodel = SQLAInterface(Order)
+   list_columns = ["CustomerId", "EmployeeId", "OrderDate", "RequiredDate"]
+   show_columns = ["CustomerId", "EmployeeId", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipName", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id"]
 
 
-db.create_all()
+
+
+
+class OrderDetailModelView(ModelView):
+   datamodel = SQLAInterface(OrderDetail)
+   list_columns = ["OrderId", "ProductId", "UnitPrice", "Quantity"]
+   show_columns = ["OrderId", "ProductId", "UnitPrice", "Quantity", "Discount", "Id"]
+
+
+
+
+
+class ProductModelView(ModelView):
+   datamodel = SQLAInterface(Product)
+   list_columns = ["ProductName", "SupplierId", "CategoryId", "QuantityPerUnit"]
+   show_columns = ["ProductName", "SupplierId", "CategoryId", "QuantityPerUnit", "UnitPrice", "UnitsInStock", "UnitsOnOrder", "ReorderLevel", "Discontinued", "Id"]
+
+
+#  13 table(s) in model, 5 page(s) generated

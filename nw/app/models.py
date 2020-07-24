@@ -30,7 +30,7 @@ class Category(BaseMixin, Model):
     Description = Column(String(8000))
 
 
-class Customer(Base):
+class Customer(BaseMixin, Model):
     __tablename__ = 'Customer'
 
     Id = Column(String(8000), primary_key=True)
@@ -96,7 +96,7 @@ class EmployeeTerritory(Base):
     TerritoryId = Column(String(8000))
 
 
-class Order(Base):
+class Order(BaseMixin, Model):
     __tablename__ = 'Order'
 
     Id = Column(Integer, primary_key=True)
@@ -115,7 +115,7 @@ class Order(Base):
     ShipCountry = Column(String(8000))
 
 
-class OrderDetail(Base):
+class OrderDetail(BaseMixin, Model):
     __tablename__ = 'OrderDetail'
 
     Id = Column(String(8000), primary_key=True)
@@ -126,7 +126,7 @@ class OrderDetail(Base):
     Discount = Column(Float, nullable=False)
 
 
-class Product(Base):
+class Product(BaseMixin, Model):
     __tablename__ = 'Product'
 
     Id = Column(Integer, primary_key=True)
