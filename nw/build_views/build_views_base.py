@@ -34,8 +34,9 @@ class build_views_base(object):
             result += self._indent + "datamodel = SQLAInterface(" + each_table.name + ")\n"
             result += self._indent + self.list_columns(each_table)
             result += self._indent + self.show_columns(each_table)
-            # result += self._indent + self.edit_columns(each_table)
-            # result += self._indent + self.add_columns(each_table)
+            result += self._indent + self.edit_columns(each_table)
+            result += self._indent + self.add_columns(each_table)
+            result += self._indent + self.related_views(each_table)
             result += "\nappbuilder.add_view(\n" + \
                 self._indent + self._indent + class_name + ", " \
                 "\"" + table_name + " List\", \
@@ -99,6 +100,57 @@ class build_views_base(object):
             result += "\"" + each_column.name + "\""
         if (has_id != "*"):
             result += ", \"" + has_id + "\""
+        result += "]\n"
+        return result
+   
+
+
+    def edit_columns(self, each_table):
+        result =  "edit_columns = ["
+        columns = each_table.columns;
+        has_id = "*"
+        result += ""
+        column_count = 0
+        for each_column in columns:
+            if (each_column.name.lower() == "id"):
+                has_id = each_column.name
+                continue
+            column_count += 1
+            if (column_count > 1):
+                result += ", "
+            result += "\"" + each_column.name + "\""
+        if (has_id != "*"):
+            result += ", \"" + has_id + "\""
+        result += "]\n"
+        return result
+   
+
+
+    def add_columns(self, each_table):
+        result =  "add_columns = ["
+        columns = each_table.columns;
+        has_id = "*"
+        result += ""
+        column_count = 0
+        for each_column in columns:
+            if (each_column.name.lower() == "id"):
+                has_id = each_column.name
+                continue
+            column_count += 1
+            if (column_count > 1):
+                result += ", "
+            result += "\"" + each_column.name + "\""
+        if (has_id != "*"):
+            result += ", \"" + has_id + "\""
+        result += "]\n"
+        return result
+   
+
+
+    def related_views(self, each_table):
+        result =  "related_views = ["
+        if (each_table.name == "Customer"):
+            result += "\"Orders\""
         result += "]\n"
         return result
 

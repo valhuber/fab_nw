@@ -20,21 +20,12 @@ class CategoryModelView(ModelView):
    datamodel = SQLAInterface(Category)
    list_columns = ["CategoryName", "Description"]
    show_columns = ["CategoryName", "Description", "Id"]
+   edit_columns = ["CategoryName", "Description", "Id"]
+   add_columns = ["CategoryName", "Description", "Id"]
+   related_views = []
 
 appbuilder.add_view(
       CategoryModelView, "Category List",                 icon="fa-folder-open-o", category="Menu")
-
-
-
-
-
-class CustomerModelView(ModelView):
-   datamodel = SQLAInterface(Customer)
-   list_columns = ["CompanyName", "ContactName", "ContactTitle", "Address"]
-   show_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
-
-appbuilder.add_view(
-      CustomerModelView, "Customer List",                 icon="fa-folder-open-o", category="Menu")
 
 
 
@@ -44,6 +35,9 @@ class OrderModelView(ModelView):
    datamodel = SQLAInterface(Order)
    list_columns = ["CustomerId", "EmployeeId", "OrderDate", "RequiredDate"]
    show_columns = ["CustomerId", "EmployeeId", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipName", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id"]
+   edit_columns = ["CustomerId", "EmployeeId", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipName", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id"]
+   add_columns = ["CustomerId", "EmployeeId", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipName", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id"]
+   related_views = []
 
 appbuilder.add_view(
       OrderModelView, "Order List",                 icon="fa-folder-open-o", category="Menu")
@@ -52,10 +46,28 @@ appbuilder.add_view(
 
 
 
+
+class CustomerModelView(ModelView):
+   datamodel = SQLAInterface(Customer)
+   list_columns = ["CompanyName", "ContactName", "ContactTitle", "Address"]
+   show_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
+   edit_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
+   add_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
+   related_views = [OrderModelView]
+
+appbuilder.add_view(
+      CustomerModelView, "Customer List",                 icon="fa-folder-open-o", category="Menu")
+
+
+
+
 class OrderDetailModelView(ModelView):
    datamodel = SQLAInterface(OrderDetail)
    list_columns = ["OrderId", "ProductId", "UnitPrice", "Quantity"]
    show_columns = ["OrderId", "ProductId", "UnitPrice", "Quantity", "Discount", "Id"]
+   edit_columns = ["OrderId", "ProductId", "UnitPrice", "Quantity", "Discount", "Id"]
+   add_columns = ["OrderId", "ProductId", "UnitPrice", "Quantity", "Discount", "Id"]
+   related_views = []
 
 appbuilder.add_view(
       OrderDetailModelView, "OrderDetail List",                 icon="fa-folder-open-o", category="Menu")
@@ -68,6 +80,9 @@ class ProductModelView(ModelView):
    datamodel = SQLAInterface(Product)
    list_columns = ["ProductName", "SupplierId", "CategoryId", "QuantityPerUnit"]
    show_columns = ["ProductName", "SupplierId", "CategoryId", "QuantityPerUnit", "UnitPrice", "UnitsInStock", "UnitsOnOrder", "ReorderLevel", "Discontinued", "Id"]
+   edit_columns = ["ProductName", "SupplierId", "CategoryId", "QuantityPerUnit", "UnitPrice", "UnitsInStock", "UnitsOnOrder", "ReorderLevel", "Discontinued", "Id"]
+   add_columns = ["ProductName", "SupplierId", "CategoryId", "QuantityPerUnit", "UnitPrice", "UnitsInStock", "UnitsOnOrder", "ReorderLevel", "Discontinued", "Id"]
+   related_views = []
 
 appbuilder.add_view(
       ProductModelView, "Product List",                 icon="fa-folder-open-o", category="Menu")

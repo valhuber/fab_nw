@@ -9,8 +9,17 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "App Builder",
+            "type": "python",
+            "request": "launch",
+            "program": "nw/build_views_file.py",
             "console": "integratedTerminal",
-            "env": {"PYTHONPATH": "${workspaceRoot}"}
+            "env": {
+                "PYTHONPATH": "${workspaceRoot}"
+            }
         }
     ]
 }

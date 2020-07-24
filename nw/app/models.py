@@ -2,15 +2,12 @@ from flask_appbuilder import Model
 from flask_appbuilder.models.mixins import BaseMixin
 from sqlalchemy import Column, Date, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-# from sqlalchemy import Column, Integer, String, ForeignKey
-# from sqlalchemy.orm import relationship
 
 """
 
 You can use the extra Flask-AppBuilder fields and Mixin's
 
 AuditMixin will add automatic timestamp of created and modified by who
-
 
 """
 
@@ -100,7 +97,9 @@ class Order(BaseMixin, Model):
     __tablename__ = 'Order'
 
     Id = Column(Integer, primary_key=True)
-    CustomerId = Column(String(8000))
+    # CustomerId = Column(String(8000))
+    CustomerId = Column(String(8000), ForeignKey("Customer.Id"), nullable=False)
+    Customer = relationship("Customer")
     EmployeeId = Column(Integer, nullable=False)
     OrderDate = Column(String(8000))
     RequiredDate = Column(String(8000))
@@ -113,6 +112,7 @@ class Order(BaseMixin, Model):
     ShipRegion = Column(String(8000))
     ShipPostalCode = Column(String(8000))
     ShipCountry = Column(String(8000))
+   
 
 
 class OrderDetail(BaseMixin, Model):
