@@ -36,9 +36,10 @@ class build_views_base(object):
             result += self._indent + self.show_columns(each_table)
             # result += self._indent + self.edit_columns(each_table)
             # result += self._indent + self.add_columns(each_table)
-            # result += self._indent + "appbuilder.add_view(\n" + \
-            self._indent + self._indent + class_name + ", " \
-                "\"List Groups (GroupMasterView)\", icon=\"fa-folder-open-o\", category=\"Menu\")\n"
+            result += "\nappbuilder.add_view(\n" + \
+                self._indent + self._indent + class_name + ", " \
+                "\"" + table_name + " List\", \
+                icon=\"fa-folder-open-o\", category=\"Menu\")\n"
             return result + "\n\n"
 
     def generate_module_imports(self):

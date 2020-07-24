@@ -21,6 +21,9 @@ class CategoryModelView(ModelView):
    list_columns = ["CategoryName", "Description"]
    show_columns = ["CategoryName", "Description", "Id"]
 
+appbuilder.add_view(
+      CategoryModelView, "Category List",                 icon="fa-folder-open-o", category="Menu")
+
 
 
 
@@ -29,6 +32,9 @@ class CustomerModelView(ModelView):
    datamodel = SQLAInterface(Customer)
    list_columns = ["CompanyName", "ContactName", "ContactTitle", "Address"]
    show_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
+
+appbuilder.add_view(
+      CustomerModelView, "Customer List",                 icon="fa-folder-open-o", category="Menu")
 
 
 
@@ -39,6 +45,9 @@ class OrderModelView(ModelView):
    list_columns = ["CustomerId", "EmployeeId", "OrderDate", "RequiredDate"]
    show_columns = ["CustomerId", "EmployeeId", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipName", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id"]
 
+appbuilder.add_view(
+      OrderModelView, "Order List",                 icon="fa-folder-open-o", category="Menu")
+
 
 
 
@@ -48,6 +57,9 @@ class OrderDetailModelView(ModelView):
    list_columns = ["OrderId", "ProductId", "UnitPrice", "Quantity"]
    show_columns = ["OrderId", "ProductId", "UnitPrice", "Quantity", "Discount", "Id"]
 
+appbuilder.add_view(
+      OrderDetailModelView, "OrderDetail List",                 icon="fa-folder-open-o", category="Menu")
+
 
 
 
@@ -56,6 +68,9 @@ class ProductModelView(ModelView):
    datamodel = SQLAInterface(Product)
    list_columns = ["ProductName", "SupplierId", "CategoryId", "QuantityPerUnit"]
    show_columns = ["ProductName", "SupplierId", "CategoryId", "QuantityPerUnit", "UnitPrice", "UnitsInStock", "UnitsOnOrder", "ReorderLevel", "Discontinued", "Id"]
+
+appbuilder.add_view(
+      ProductModelView, "Product List",                 icon="fa-folder-open-o", category="Menu")
 
 
 #  13 table(s) in model, 5 page(s) generated
