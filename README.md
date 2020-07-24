@@ -13,15 +13,13 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Then, open the file build_views_file.py, and run in (e.g, under the debugger).
-
 
 
 ## Generate
 
-Run the file build_views_file.py
+Then, open the file build_views_file.py, and run it (e.g, under the debugger).
 
-Copy the console output over the views.py file
+Copy the console output over the app/views.py file
 
 
 # Run
