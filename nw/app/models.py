@@ -119,8 +119,10 @@ class OrderDetail(BaseMixin, Model):
     __tablename__ = 'OrderDetail'
 
     Id = Column(String(8000), primary_key=True)
-    OrderId = Column(Integer, nullable=False)
-    ProductId = Column(Integer, nullable=False)
+    OrderId = Column(Integer, ForeignKey("Order.Id"), nullable=False)
+    Order = relationship("Order")
+    ProductId = Column(Integer, ForeignKey("Product.Id"), nullable=False)
+    Product = relationship("Product")
     UnitPrice = Column(DECIMAL, nullable=False)
     Quantity = Column(Integer, nullable=False)
     Discount = Column(Float, nullable=False)

@@ -38,10 +38,12 @@ class build_views_base(object):
             result += self._indent + self.add_columns(each_table)
             result += self._indent + self.related_views(each_table)
             result += "\nappbuilder.add_view(\n" + \
-                self._indent + self._indent + class_name + ", " \
-                "\"" + table_name + " List\", \
-                icon=\"fa-folder-open-o\", category=\"Menu\")\n"
+                self._indent + self._indent + class_name + ", " +\
+                "\"" + table_name + " List\", " +\
+                "icon=\"fa-folder-open-o\", category=\"Menu\")\n"
             return result + "\n\n"
+
+
 
     def generate_module_imports(self):
         result = "from flask_appbuilder import ModelView\n"
@@ -49,6 +51,8 @@ class build_views_base(object):
         result += "from . import appbuilder, db\n"
         result += "from .models import *\n"
         result += "\n"
+        result += "#TODO - if you get compile errors due to class reference depencencies\n"
+        result += "#  - temporary fix - edit this file to move class defs\n\n"
         return result
 
     def generate_class_for_table(self, each_table):
@@ -147,10 +151,14 @@ class build_views_base(object):
    
 
 
-    def related_views(self, each_table):
+    def related_views(self, each_table):  # TODO - stub, for testing
         result =  "related_views = ["
         if (each_table.name == "Customer"):
-            result += "\"Orders\""
+            result += "OrderModelView"
+        elif (each_table.name == "Order"):
+            result += "OrderDetailModelView"
+        elif (each_table.name == "Product"):
+            result += "OrderDetailModelView"
         result += "]\n"
         return result
 
