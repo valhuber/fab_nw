@@ -1,3 +1,39 @@
+# -*- coding: utf-8 -*-
+"""Generates FAB view files from db model.
+
+This is the super class
+    Use build_views, and provide overides as required.
+
+
+To run:
+    1. Generate model (consider https://pypi.org/project/sqlacodegen/)
+        a. Hand-add relationships
+        b. Hand-edit classes, e.g.,
+            not: def Customer(Model)
+            but: def Customer(BaseMixin, Model)
+    2. Run build_views_base.py
+    3. Copy contents to your app/views.py file
+
+Todo:
+    * View Classes Generation Order: referenced-classes first
+    * Proper related_views handling (and fix models.py)
+    * Predictive Joins
+    * Override Show-Name field first (eg, not "name" in French)
+    * Lookups (find/choose Product for Order Detail)
+    * Tune edit / add cols (e.g. no Ids)
+    * Suppress Master on Chid (no Order# on each Order Detail)
+    * More overrides (discuss approach with Daniel)
+    * Better packaging (requires Daniel discussion)
+    * Recognize other views, such as Maps
+    * FAB
+        * better col/field captions
+        * updatable list (=> multi-row save)
+
+.. _Google Python Style Guide:
+   http://google.github.io/styleguide/pyguide.html
+
+"""
+
 print("\n\nbuild_views_base loading")
 
 
@@ -21,7 +57,25 @@ class build_views_base(object):
 
 
 
-    def process_each_table(self, each_table):
+    def generate_module_imports(self) -> str:
+        result = "from flask_appbuilder import ModelView\n"
+        result += "from flask_appbuilder.models.sqla.interface import SQLAInterface\n"
+        result += "from . import appbuilder, db\n"
+        result += "from .models import *\n"
+        result += "\n"
+        result += "# TODO - if you get compile errors due to class reference depencencies\n"
+        result += "#  - temporary fix - edit this file to move class defs\n\n"
+        return result
+
+
+
+    def process_each_table(self, each_table)  -> str:
+        """
+            Generate class and add_view for given table.
+
+            Args:
+                each_table - tables' model instance
+        """
         table_name = each_table.name
         print("process_each_table: " + table_name)
         if (table_name.startswith("ab_")):
@@ -44,16 +98,6 @@ class build_views_base(object):
             return result + "\n\n"
 
 
-
-    def generate_module_imports(self):
-        result = "from flask_appbuilder import ModelView\n"
-        result += "from flask_appbuilder.models.sqla.interface import SQLAInterface\n"
-        result += "from . import appbuilder, db\n"
-        result += "from .models import *\n"
-        result += "\n"
-        result += "#TODO - if you get compile errors due to class reference depencencies\n"
-        result += "#  - temporary fix - edit this file to move class defs\n\n"
-        return result
 
     def generate_class_for_table(self, each_table):
         return self.perform_class_for_table(each_table, "ModelView")
@@ -165,7 +209,7 @@ class build_views_base(object):
 
 
     def model_name(self, table_name):  # override as req'd
-        return "ModelViewSuper"
+        return "ModelView"
 
 
     def name_column(self, metadata):
