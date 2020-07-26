@@ -13,11 +13,14 @@ class BuildViews(BuildViewsBase):
     def model_name(self, table_name):  # override
         return "ModelView"
 
-    def name_column(self, db):  # override as desired
-        result = super().name_column(db)
+    def favorite_column(self, a_table_def):  # override as desired
+        result = super().favorite_column(a_table_def)
         return result
 
-    def build_views(self, model):
+    def favorite_name(self):
+        return ["name", "description"]
+
+    def build_views_unused(self, model):
         """Generators have a ``Yields`` section instead of a ``Returns`` section.
 
             Args:

@@ -41,28 +41,29 @@ class Customer(BaseMixin, Model):
     Country = Column(String(8000))
     Phone = Column(String(8000))
     Fax = Column(String(8000))
-    Order_List = relationship("Order")  # is this required?  how does fab find children?
+    # Order_List = relationship("Order")  # is this required?  how does fab find children?
 
     def __repr__(self):
         return self.CompanyName
 
 
 
-class CustomerCustomerDemo(Base):
+class CustomerCustomerDemo(BaseMixin, Model):
     __tablename__ = 'CustomerCustomerDemo'
 
     Id = Column(String(8000), primary_key=True)
-    CustomerTypeId = Column(String(8000))
+    CustomerTypeId = Column(String(8000), ForeignKey("Customer.Id"))
+    Customer = relationship("Customer")
 
 
-class CustomerDemographic(Base):
+class CustomerDemographic(BaseMixin, Model):
     __tablename__ = 'CustomerDemographic'
 
     Id = Column(String(8000), primary_key=True)
     CustomerDesc = Column(String(8000))
 
 
-class Employee(Base):
+class Employee(BaseMixin, Model):
     __tablename__ = 'Employee'
 
     Id = Column(Integer, primary_key=True)
@@ -85,12 +86,14 @@ class Employee(Base):
     PhotoPath = Column(String(8000))
 
 
-class EmployeeTerritory(Base):
+class EmployeeTerritory(BaseMixin, Model):
     __tablename__ = 'EmployeeTerritory'
 
     Id = Column(String(8000), primary_key=True)
-    EmployeeId = Column(Integer, nullable=False)
-    TerritoryId = Column(String(8000))
+    EmployeeId = Column(Integer, ForeignKey("Employee.Id"), nullable=False)
+    Employee = relationship("Employee")
+    TerritoryId = Column(String(8000), ForeignKey("Territory.Id") )
+    Territory = relationship("Territory")
 
 
 class Order(BaseMixin, Model):
@@ -162,14 +165,14 @@ t_ProductDetails_V = Table(
 )
 
 
-class Region(Base):
+class Region(BaseMixin, Model):
     __tablename__ = 'Region'
 
     Id = Column(Integer, primary_key=True)
     RegionDescription = Column(String(8000))
 
 
-class Shipper(Base):
+class Shipper(BaseMixin, Model):
     __tablename__ = 'Shipper'
 
     Id = Column(Integer, primary_key=True)
@@ -177,7 +180,7 @@ class Shipper(Base):
     Phone = Column(String(8000))
 
 
-class Supplier(Base):
+class Supplier(BaseMixin, Model):
     __tablename__ = 'Supplier'
 
     Id = Column(Integer, primary_key=True)
@@ -194,7 +197,7 @@ class Supplier(Base):
     HomePage = Column(String(8000))
 
 
-class Territory(Base):
+class Territory(BaseMixin, Model):
     __tablename__ = 'Territory'
 
     Id = Column(String(8000), primary_key=True)
