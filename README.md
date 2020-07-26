@@ -43,7 +43,7 @@ Then, open the file build_views_file.py, and run it (e.g, under the debugger).
 Copy the console output over the app/views.py file
 
 
-# Run
+## Run
 ```
 cd nw
 export FLASK_APP=app
