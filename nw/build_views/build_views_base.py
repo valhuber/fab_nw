@@ -15,7 +15,6 @@ To run:
     3. Copy contents to your app/views.py file
 
 Todo:
-    * View Classes Generation Order: referenced-classes first
     * Proper related_views handling (and fix models.py)
     * Predictive Joins
     * Override Show-Name field first (eg, not "name" in French)
@@ -34,25 +33,26 @@ Todo:
 
 """
 
-print("\n\nbuild_views_base loading")
+print("\n\BuildViewsBase loading")
 
 
-class build_views_base(object):
+class BuildViewsBase(object):
     """
     Iterate over all tables, create view statements for each
     """
     _result = "# default view.py\n\n"
 
     _indent = "   "
-    _pages_generated = 0
+    _tables_generated = set()  # to address "generate children first"
+    num_pages_generated = 0
 
-    def generate_view(self, db):
-        tables = db.Model.metadata.tables
+    def generate_view(self, a_db):
+        meta_tables = a_db.Model.metadata.tables
         self._result += self.generate_module_imports()
-        for each_table in tables.items():
+        for each_table in meta_tables.items():
             each_result = self.process_each_table(each_table[1])
             self._result += each_result
-        self._result += self.process_module_end(tables)
+        self._result += self.process_module_end(meta_tables)
         return self._result
 
 
@@ -63,34 +63,44 @@ class build_views_base(object):
         result += "from . import appbuilder, db\n"
         result += "from .models import *\n"
         result += "\n"
-        result += "# TODO - if you get compile errors due to class reference depencencies\n"
-        result += "#  - temporary fix - edit this file to move class defs\n\n"
         return result
 
 
 
-    def process_each_table(self, each_table)  -> str:
+    def process_each_table(self, a_table_def)  -> str:
         """
             Generate class and add_view for given table.
 
+            These must be children first, so "related_views" compile.
+                We therefore recurse for children first.
+
             Args:
-                each_table - tables' model instance
+                a_table_def - tables' model instance
         """
-        table_name = each_table.name
+        result = ""
+        table_name = a_table_def.name
         print("process_each_table: " + table_name)
         if (table_name.startswith("ab_")):
             return "# skip admin table: " + table_name + "\n"
+        elif (table_name in self._tables_generated):
+            print("table already generated per recursion: " + table_name)
+            return "# table already generated per recursion: " + table_name
         else:
-            self._pages_generated += 1
+            child_list = self.find_child_list(a_table_def)
+            for each_child in child_list:  # recurse to ensure children first
+                print(".. but children first: " + each_child.name)
+                result += self.process_each_table(each_child)
+                self._tables_generated.add(each_child.name)
+            self.num_pages_generated += 1
             model_name = self.model_name(table_name)
-            class_name = each_table.name + model_name
-            result = "\n\n\nclass " + class_name + "(" + model_name + "):\n"
-            result += self._indent + "datamodel = SQLAInterface(" + each_table.name + ")\n"
-            result += self._indent + self.list_columns(each_table)
-            result += self._indent + self.show_columns(each_table)
-            result += self._indent + self.edit_columns(each_table)
-            result += self._indent + self.add_columns(each_table)
-            result += self._indent + self.related_views(each_table)
+            class_name = a_table_def.name + model_name
+            result += "\n\n\nclass " + class_name + "(" + model_name + "):\n"
+            result += self._indent + "datamodel = SQLAInterface(" + a_table_def.name + ")\n"
+            result += self._indent + self.list_columns(a_table_def)
+            result += self._indent + self.show_columns(a_table_def)
+            result += self._indent + self.edit_columns(a_table_def)
+            result += self._indent + self.add_columns(a_table_def)
+            result += self._indent + self.related_views(a_table_def)
             result += "\nappbuilder.add_view(\n" + \
                 self._indent + self._indent + class_name + ", " +\
                 "\"" + table_name + " List\", " +\
@@ -99,21 +109,21 @@ class build_views_base(object):
 
 
 
-    def generate_class_for_table(self, each_table):
-        return self.perform_class_for_table(each_table, "ModelView")
+    def generate_class_for_table(self, a_table_def):
+        return self.perform_class_for_table(a_table_def, "ModelView")
 
-    def perform_class_for_table(self, each_table, model_name):
-        result = "\n\n\nclass " + each_table.name + \
-            model_name + "(" + model_name + "):\n"
+    def perform_class_for_table(self, a_table_def, a_model_name):
+        result = "\n\n\nclass " + a_table_def.name + \
+            a_model_name + "(" + a_model_name + "):\n"
         result += self._indent + \
-            "datamodel = SQLAInterface(" + each_table.name + ")"
+            "datamodel = SQLAInterface(" + a_table_def.name + ")"
         return result
     
 
 
-    def list_columns(self, each_table):
+    def list_columns(self, a_table_def):
         result =  "list_columns = ["
-        columns = each_table.columns;
+        columns = a_table_def.columns;
         has_id = "*"
         result += ""
         column_count = 0
@@ -132,9 +142,9 @@ class build_views_base(object):
    
 
 
-    def show_columns(self, each_table):
+    def show_columns(self, a_table_def):
         result =  "show_columns = ["
-        columns = each_table.columns;
+        columns = a_table_def.columns;
         has_id = "*"
         result += ""
         column_count = 0
@@ -153,9 +163,9 @@ class build_views_base(object):
    
 
 
-    def edit_columns(self, each_table):
+    def edit_columns(self, a_table_def):
         result =  "edit_columns = ["
-        columns = each_table.columns;
+        columns = a_table_def.columns;
         has_id = "*"
         result += ""
         column_count = 0
@@ -174,9 +184,9 @@ class build_views_base(object):
    
 
 
-    def add_columns(self, each_table):
+    def add_columns(self, a_table_def):
         result =  "add_columns = ["
-        columns = each_table.columns;
+        columns = a_table_def.columns;
         has_id = "*"
         result += ""
         column_count = 0
@@ -195,27 +205,69 @@ class build_views_base(object):
    
 
 
-    def related_views(self, each_table):  # TODO - stub, for testing
+    def related_views(self, a_table_def):  # TODO - stub, for testing
+        """
+            Builds related_views from Foreign Key definitions
+
+            Todo
+                * are child roles req's (e.g.,) children = relationship("Child")
+                * are multiple relationsips supported (dept has worksFor / OnLoan Emps)
+                * are circular relationships supports (dept has emps, emp has mgr)
+        """
         result =  "related_views = ["
+        child_list = self.find_child_list(a_table_def)
+        for each_child in child_list:
+            result += each_child.fullname + self.model_name(each_child)
+        """
         if (each_table.name == "Customer"):
             result += "OrderModelView"
         elif (each_table.name == "Order"):
             result += "OrderDetailModelView"
         elif (each_table.name == "Product"):
             result += "OrderDetailModelView"
+        """
         result += "]\n"
         return result
 
 
 
-    def model_name(self, table_name):  # override as req'd
+    def find_child_list(self, a_table_def):
+        """
+            Returns list of models w/ fKey to each_table
+
+            Not super efficient
+                pass entire table list for each table
+                ok until very large schemas
+        """
+        child_list = []
+        all_tables = a_table_def.metadata.tables
+        all_tables_items = all_tables.items()
+        for each_possible_child_tuple in all_tables.items():
+            each_possible_child = each_possible_child_tuple[1]
+            parents = each_possible_child.foreign_keys
+            # if (a_table_def.name == "Customer" and each_possible_child.name == "Order"):
+            #    print (a_table_def)
+            for each_parent in parents:
+                each_parent_name = each_parent.target_fullname
+                loc_dot = each_parent_name.index(".")
+                each_parent_name = each_parent_name[0:loc_dot]
+                if (each_parent_name == a_table_def.name):
+                    child_list.append(each_possible_child)
+        return child_list
+
+    def model_name(self, a_table_name):  # override as req'd
+        """
+            returns model_name, defaulted to "ModelView"
+
+            intended for subclass override, for custom views
+        """
         return "ModelView"
 
 
     def name_column(self, metadata):
         return "name"
 
-    def process_module_end(self, tables):
-        result = "#  " + str(len(tables)) + " table(s) in model, " + \
-            str(self._pages_generated) + " page(s) generated\n\n"
+    def process_module_end(self, a_metadata_tables):
+        result = "#  " + str(len(a_metadata_tables)) + " table(s) in model, " + \
+            str(self.num_pages_generated) + " page(s) generated\n\n"
         return result

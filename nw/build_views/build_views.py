@@ -4,11 +4,11 @@
 """
 
 # from composite_keys.build_views.build_views_base import build_views_base.build_views_base
-from nw.build_views.build_views_base import build_views_base
+from nw.build_views.build_views_base import BuildViewsBase
 
 print("build_views (overrides here)")
 
-class build_views(build_views_base):
+class BuildViews(BuildViewsBase):
 
     def model_name(self, table_name):  # override
         return "ModelView"

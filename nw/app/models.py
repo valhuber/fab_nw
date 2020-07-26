@@ -41,7 +41,7 @@ class Customer(BaseMixin, Model):
     Country = Column(String(8000))
     Phone = Column(String(8000))
     Fax = Column(String(8000))
-
+    Order_List = relationship("Order")  # is this required?  how does fab find children?
 
     def __repr__(self):
         return self.CompanyName
