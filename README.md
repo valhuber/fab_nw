@@ -1,7 +1,7 @@
 # fab_nw
 Work in Progress - Generate Flask Application Builder views file - 1 page (with related) for each table in the model.
 
-This is a fab project for nw.  It includes build_views, which can generate a view.py multi-page/multi-table app.
+This is a fab project for nw (sqllite).  It includes __build_views__, which can generate a `view.py` multi-page/multi-table app.
 
 
 ## Key Features
