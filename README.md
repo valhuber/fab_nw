@@ -55,5 +55,5 @@ flask run
 ## Explore
 
 The main code is 
-`buid_views/build_views_base.py', the super for 
+`buid_views/build_views_base.py`, the super for 
 `build_views/build_views.py` (overrides for customization).
