@@ -6,7 +6,7 @@ This is a fab project for nw.  It includes build_views, which can generate a vie
 
 ## Key Features
 
-1. Generate views.py with 1 class per (not ab_) table
+1. Generate `views.py` with 1 class per (not ab_) table
 
     a. "Favorite" fields (contains name) first
 
@@ -38,9 +38,9 @@ pip install -r requirements.txt
 
 ## Generate
 
-Then, open the file build_views_file.py, and run it (e.g, under the debugger).
+Then, open the file `build_views_file.py`, and run it (e.g, under the debugger).
 
-Copy the console output over the app/views.py file
+Copy the console output over the `app/views.py` file
 
 
 ## Run
@@ -49,3 +49,11 @@ cd nw
 export FLASK_APP=app
 flask run
 ```
+
+
+
+## Explore
+
+The main code is 
+`buid_views/build_views_base.py', the super for 
+`build_views/build_views.py` (overrides for customization).
