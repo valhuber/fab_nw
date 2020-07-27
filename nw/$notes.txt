@@ -2,3 +2,6 @@
     sqlagenerator does not generate fKeys or relns
 
 
+cd /Users/val/python/vsc/fab_nw ; env /Users/val/python/vsc/fab_nw/venv/bin/python3.8 /Users/val/.vscode/extensions/ms-python.python-2020.7.96456/pythonFiles/lib/python/debugpy/launcher 59007 -- -m flask run --no-debugger --no-reload 
+
+cd /Users/val/python/vsc/fab_nw ; env /Users/val/python/vsc/fab_nw/venv/bin/python3.8 /Users/val/.vscode/extensions/ms-python.python-2020.7.96456/pythonFiles/lib/python/debugpy/launcher 59007 -- -m flask run --debugger --reload

@@ -20,6 +20,25 @@
             "env": {
                 "PYTHONPATH": "${workspaceRoot}"
             }
+        },
+        {
+            "name": "NW: Flask",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "nw/app",
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "0",
+                "PYTHONPATH": "${workspaceRoot}"
+            },
+            "args": [
+                "run",
+                "--debugger",
+                "--reload"
+            ],
+            "jinja": true
         }
+
     ]
 }
