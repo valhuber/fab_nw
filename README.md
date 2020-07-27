@@ -57,3 +57,7 @@ flask run
 The main code is `buid_views/build_views_base.py`.
 
 Overrides for customization are in `build_views/build_views.py`, which is invoked by `build_views_file.py`
+
+## Screenshot
+    
+![image](https://drive.google.com/uc?export=view&id=1Q3cG-4rQ6Q6RdZppvkrQzCDhDYHnk-F6)
