@@ -11,7 +11,7 @@ To run:
         b. Hand-edit classes, e.g.,
             not: def Customer(Model)
             but: def Customer(BaseMixin, Model)
-    2. Run build_views_base.py
+    2. Run build_views_file.py
     3. Copy console contents to your app/views.py file
     4. cd nw; flask run
 
@@ -28,11 +28,12 @@ Status:
     * Technology Preview
 
 Todo:
+    * Query_columns
     * OrderDetail - magnifying glass page fails
     * Complete relationships in models.py
     * Lookups (find/choose Product for Order Detail)
     * Suppress Master on Child (no Order# on each Order Detail)
-        ** Big deal, since can't re-use child on multiple differnt parents.  Ugh
+        ** Big deal, since can't re-use child on multiple different parents.  Ugh
     * More overrides in build_views.py (discuss approach with Daniel)
     * Better packaging (requires Daniel discussion)
     * Recognize other views, such as Maps
