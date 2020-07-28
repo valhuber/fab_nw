@@ -30,7 +30,7 @@ In VSCode Python Debug Console:
 
 ```
 virtualenv venv
-source venv/bin/activate
+source venv/bin/activate   # windows: .\venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
