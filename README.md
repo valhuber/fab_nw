@@ -24,7 +24,7 @@ This is a fab project for nw (sqllite).  It includes __build_views__, which can 
 
 ## Install
 
-open VSCode, and clone this repo
+open VSCode, and clone this repo.
 
 In VSCode Python Debug Console:
 
@@ -35,6 +35,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Note: Windows Powershell requires privileges as described [here](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershel)
 
 
 ## Generate
