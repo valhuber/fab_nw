@@ -9,9 +9,13 @@ from datetime import datetime
 
 from nw.build_views import build_views
 
-print("\n\nRunning: " + sys.argv[0] + "\n\n" + sys.version +"\n\n")
+import logging
+
+log = logging.getLogger(__name__)
+log.debug("\n\nRunning: " + sys.argv[0] + "\n\n" + sys.version +"\n\n")
 
 view_builder = build_views.BuildViews()
 generated_view = view_builder.generate_view(db)
 
-print("\n\nCompleted, generated views.py-->\n\n" + generated_view)
+log.debug("\n\nCompleted, generated views.py-->\n\n\n\n")
+print(generated_view)

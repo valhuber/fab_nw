@@ -6,7 +6,11 @@
 # from composite_keys.build_views.build_views_base import build_views_base.build_views_base
 from nw.build_views.build_views_base import BuildViewsBase
 
-print("build_views (overrides here)")
+import logging
+
+log = logging.getLogger(__name__)
+log.debug("build_views (overrides here)")
+
 
 class BuildViews(BuildViewsBase):
 

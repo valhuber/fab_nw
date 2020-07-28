@@ -4,6 +4,10 @@
 This is the super class
     Use build_views, and provide overides as required.
 
+Discussion 7/28
+    Code cleanup: flake8, black
+    Standard out (enable pipe)
+    Command line, using click (but, customization via subclass)
 
 To run:
     1. Generate model (consider https://pypi.org/project/sqlacodegen/)
@@ -46,14 +50,18 @@ Todo:
 
 """
 
-print("\n\BuildViewsBase loading")
+import logging
+import datetime
+
+log = logging.getLogger(__name__)
+log.debug("BuildViewsBase loading...")
 
 
 class BuildViewsBase(object):
     """
     Iterate over all tables, create view statements for each
     """
-    _result = "# default view.py\n\n"
+    _result = "# default views.py, generated at: " + str(datetime.datetime.now()) + "\n\n"
 
     _indent = "   "
     _tables_generated = set()  # to address "generate children first"
@@ -92,16 +100,16 @@ class BuildViewsBase(object):
         """
         result = ""
         table_name = a_table_def.name
-        print("process_each_table: " + table_name)
+        log.debug("process_each_table: " + table_name)
         if (table_name.startswith("ab_")):
             return "# skip admin table: " + table_name + "\n"
         elif (table_name in self._tables_generated):
-            print("table already generated per recursion: " + table_name)
+            log.debug("table already generated per recursion: " + table_name)
             return "# table already generated per recursion: " + table_name
         else:
             child_list = self.find_child_list(a_table_def)
             for each_child in child_list:  # recurse to ensure children first
-                print(".. but children first: " + each_child.name)
+                log.debug(".. but children first: " + each_child.name)
                 result += self.process_each_table(each_child)
                 self._tables_generated.add(each_child.name)
             self.num_pages_generated += 1
@@ -164,7 +172,7 @@ class BuildViewsBase(object):
         processed_column_names = set()
         result += ""
         if (a_table_def.name == "Territory"):
-            print("Territory reached")
+            log.debug("Territory reached")
 
         favorite_column_name = self.favorite_column_name(a_table_def)
         column_count = 1
@@ -209,7 +217,7 @@ class BuildViewsBase(object):
         result = set()
         foreign_keys = a_table_def.foreign_keys
         if (a_table_def.name == "OrderDetail"):
-            print ("predictive_joins for: " + a_table_def.name)
+            log.debug ("predictive_joins for: " + a_table_def.name)
         for each_foreign_key in foreign_keys:
             each_parent_name = each_foreign_key.target_fullname
             loc_dot = each_parent_name.index(".")
