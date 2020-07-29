@@ -5,9 +5,15 @@ This is the super class
     Use build_views, and provide overides as required.
 
 Discussion 7/28
-    Code cleanup: flake8, black
-    Standard out (enable pipe)
+    Code cleanup: flake8, black (now activated, done?)
+    Standard out: print vs. log (done)
+    Annotations (done)
     Command line, using click (but, customization via subclass)
+        Needs discussion FIXME
+            This depends on dir location of app (its __init__)
+            to obtain the db.
+
+            Will that work in cmd line?  Is there a better way to get db?
 
 To run:
     1. Generate model (consider https://pypi.org/project/sqlacodegen/)
@@ -37,21 +43,24 @@ Todo:
     * Complete relationships in models.py
     * Lookups (find/choose Product for Order Detail)
     * Suppress Master on Child (no Order# on each Order Detail)
-        ** Big deal, since can't re-use child on multiple different parents.  Ugh
+        ** Big deal, since can't re-use child on multiple different parents.
+        ** Ugh
     * More overrides in build_views.py (discuss approach with Daniel)
     * Better packaging (requires Daniel discussion)
     * Recognize other views, such as Maps
     * FAB
         * better col/field captions
         * updatable list (=> multi-row save)
-
-.. _Google Python Style Guide:
-   http://google.github.io/styleguide/pyguide.html
-
 """
 
 import logging
 import datetime
+from typing import NewType
+
+MetaDataTables = NewType('MetaDataTables', object)
+TableModelInstance = NewType('TableModelInstance', object)
+SqlAEngine = NewType('SqlAEngine', object)
+
 
 log = logging.getLogger(__name__)
 log.debug("BuildViewsBase loading...")
@@ -61,13 +70,23 @@ class BuildViewsBase(object):
     """
     Iterate over all tables, create view statements for each
     """
-    _result = "# default views.py, generated at: " + str(datetime.datetime.now()) + "\n\n"
+
+    _result = (
+        "# default views.py, generated at: " +
+        str(datetime.datetime.now()) + "\n\n"
+    )
 
     _indent = "   "
     _tables_generated = set()  # to address "generate children first"
     num_pages_generated = 0
 
-    def generate_view(self, a_db):
+    def generate_view(self, a_db: SqlAEngine) -> str:
+        """
+            Returns a string of views.py content
+
+            Parameters:
+                argument1 (SqlAEngine): opened sqlA db
+        """
         meta_tables = a_db.Model.metadata.tables
         self._result += self.generate_module_imports()
         for each_table in meta_tables.items():
@@ -76,9 +95,10 @@ class BuildViewsBase(object):
         self._result += self.process_module_end(meta_tables)
         return self._result
 
-
-
     def generate_module_imports(self) -> str:
+        """
+            Returns a string of views.py imports
+        """
         result = "from flask_appbuilder import ModelView\n"
         result += "from flask_appbuilder.models.sqla.interface import SQLAInterface\n"
         result += "from . import appbuilder, db\n"
@@ -86,24 +106,25 @@ class BuildViewsBase(object):
         result += "\n"
         return result
 
-
-
-    def process_each_table(self, a_table_def)  -> str:
+    def process_each_table(self, a_table_def: TableModelInstance) -> str:
         """
             Generate class and add_view for given table.
 
             These must be children first, so "related_views" compile.
                 We therefore recurse for children first.
 
-            Args:
-                a_table_def - tables' model instance
+            Parameters
+                argument1 a_table_def - TableModelInstance
+
+            Returns
+                string class and add_view for given table.
         """
         result = ""
         table_name = a_table_def.name
         log.debug("process_each_table: " + table_name)
-        if (table_name.startswith("ab_")):
+        if table_name.startswith("ab_"):
             return "# skip admin table: " + table_name + "\n"
-        elif (table_name in self._tables_generated):
+        elif table_name in self._tables_generated:
             log.debug("table already generated per recursion: " + table_name)
             return "# table already generated per recursion: " + table_name
         else:
@@ -116,108 +137,128 @@ class BuildViewsBase(object):
             model_name = self.model_name(table_name)
             class_name = a_table_def.name + model_name
             result += "\n\n\nclass " + class_name + "(" + model_name + "):\n"
-            result += self._indent + "datamodel = SQLAInterface(" + a_table_def.name + ")\n"
+            result += (
+                self._indent + "datamodel = SQLAInterface(" +
+                a_table_def.name + ")\n"
+            )
             result += self._indent + self.list_columns(a_table_def)
             result += self._indent + self.show_columns(a_table_def)
             result += self._indent + self.edit_columns(a_table_def)
             result += self._indent + self.add_columns(a_table_def)
             result += self._indent + self.related_views(a_table_def)
-            result += "\nappbuilder.add_view(\n" + \
-                self._indent + self._indent + class_name + ", " +\
-                "\"" + table_name + " List\", " +\
-                "icon=\"fa-folder-open-o\", category=\"Menu\")\n"
+            result += (
+                "\nappbuilder.add_view(\n"
+                + self._indent
+                + self._indent
+                + class_name
+                + ", "
+                + '"'
+                + table_name
+                + ' List", '
+                + 'icon="fa-folder-open-o", category="Menu")\n'
+            )
             return result + "\n\n"
 
+    def list_columns(self, a_table_def: TableModelInstance) -> str:
+        """
+            Generate list_columns = [...]
 
+            These must be children first, so "related_views" compile.
+                We therefore recurse for children first.
 
-    def list_columns(self, a_table_def):
+            Parameters
+                argument1 a_table_def - TableModelInstance
+
+            Returns
+                string class and add_view for given table.
+        """
         return self.gen_columns(a_table_def, "list_columns = [", 2, 4)
 
-
-
-    def show_columns(self, a_table_def):
+    def show_columns(self, a_table_def: TableModelInstance):
         return self.gen_columns(a_table_def, "show_columns = [", 99, 999)
 
-
-
-    def edit_columns(self, a_table_def):
+    def edit_columns(self, a_table_def: TableModelInstance):
         return self.gen_columns(a_table_def, "edit_columns = [", 99, 999)
 
-
-
-    def add_columns(self, a_table_def):
+    def add_columns(self, a_table_def: TableModelInstance):
         return self.gen_columns(a_table_def, "add_columns = [", 99, 999)
 
-
-
-    def gen_columns(self, a_table_def, a_view_type, a_max_joins, a_max_columns):
+    def gen_columns(self, a_table_def: TableModelInstance,
+                    a_view_type: int, a_max_joins: int, a_max_columns: int):
         """
         Generates statements like:
 
-            list_columns = ["Id", "Product.ProductName", "Order.ShipName", "UnitPrice", "OrderId", "ProductId", "Id"]
-        
-        Arguments
+            list_columns =["Id", "Product.ProductName", ... "Id"]
 
-            a_table_def - metadata for columns, relationships etc
+            Parameters
+                argument1 a_table_def - TableModelInstance
+                argument2 a_view_type - str like "list_columns = ["
+                argument3 a_max_joins - int max joins (list is smaller)
+                argument4 a_max_fields - int how many columns (list smaller)
 
-            a_view_type - a string like "list_columns = ["
-
-            a_max_joins - how many joins (e.g., fewer on list)
-
-            a_max_fields - how many columns (e.g., fewer on list)
+            Returns
+                string like list_columns =["Name", "Parent.Name", ... "Id"]
         """
-        result =  a_view_type
-        columns = a_table_def.columns;
+        result = a_view_type
+        columns = a_table_def.columns
         id_column_names = set()
         processed_column_names = set()
         result += ""
-        if (a_table_def.name == "Territory"):
+        if a_table_def.name == "Territory":
             log.debug("Territory reached")
 
         favorite_column_name = self.favorite_column_name(a_table_def)
         column_count = 1
-        result += "\"" + favorite_column_name + "\""
+        result += '"' + favorite_column_name + '"'
         processed_column_names.add(favorite_column_name)
 
         predictive_joins = self.predictive_join_columns(a_table_def)
-        if ("list" in a_view_type or "show" in a_view_type):  # alert - prevent fab key errors!
+        if (
+            "list" in a_view_type or "show" in a_view_type
+        ):  # alert - prevent fab key errors!
             for each_join_column in predictive_joins:
                 column_count += 1
-                if (column_count > 1):
+                if column_count > 1:
                     result += ", "
-                result += "\"" + each_join_column + "\""
-                if (column_count > a_max_joins):
+                result += '"' + each_join_column + '"'
+                if column_count > a_max_joins:
                     break
         for each_column in columns:
-            if (each_column.name in processed_column_names):
+            if each_column.name in processed_column_names:
                 continue
-            if ("id" in each_column.name.lower()):  # ids are boring - do at end
+            if "id" in each_column.name.lower():  # ids are boring - do at end
                 id_column_names.add(each_column.name)
                 continue
             column_count += 1
-            if (column_count > a_max_columns):  # - Todo - make external
+            if column_count > a_max_columns:  # - Todo - make external
                 break
-            if (column_count > 1):
+            if column_count > 1:
                 result += ", "
-            result += "\"" + each_column.name + "\""
+            result += '"' + each_column.name + '"'
         for each_id_column_name in id_column_names:
             column_count += 1
-            if (column_count > 1):
+            if column_count > 1:
                 result += ", "
-            result += "\"" + each_id_column_name + "\""
+            result += '"' + each_id_column_name + '"'
         result += "]\n"
         return result
 
-
-
-    def predictive_join_columns(self, a_table_def):
+    def predictive_join_columns(self, a_table_def: TableModelInstance) -> set:
         """
-            Returns set of col names (such Product.ProductName for OrderDetail)
+        Generates statements like:
+
+            list_columns =["Id", "Product.ProductName", ... "Id"]
+
+            Parameters
+                argument1 a_table_def - TableModelInstance
+
+            Returns
+                set of col names (such Product.ProductName for OrderDetail)
         """
         result = set()
         foreign_keys = a_table_def.foreign_keys
-        if (a_table_def.name == "OrderDetail"):
-            log.debug ("predictive_joins for: " + a_table_def.name)
+        if a_table_def.name == "OrderDetail":
+            log.debug("predictive_joins for: " + a_table_def.name)
         for each_foreign_key in foreign_keys:
             each_parent_name = each_foreign_key.target_fullname
             loc_dot = each_parent_name.index(".")
@@ -227,111 +268,130 @@ class BuildViewsBase(object):
             result.add(each_parent_name + "." + favorite_column_name)
         return result
 
-   
-
-
-    def related_views(self, a_table_def):  # TODO - stub, for testing
+    def related_views(self, a_table_def: TableModelInstance) -> str:
         """
-            Builds related_views from Foreign Key definitions
+            Generates statments like
+                related_views = ["Child1", "Child2"]
 
             Todo
-                * are child roles req's (e.g.,) children = relationship("Child")
-                * are multiple relationsips supported (dept has worksFor / OnLoan Emps)
-                * are circular relationships supports (dept has emps, emp has mgr)
+                * are child roles required?
+                    ** e.g., children = relationship("Child"
+                * are multiple relationsips supported?
+                    ** e.g., dept has worksFor / OnLoan Emps
+                * are circular relationships supported?
+                    ** e.g., dept has emps, emp has mgr
+
+            Parameters
+                argument1 a_table_def - TableModelInstance
+
+            Returns
+                str like related_views = ["Child1", "Child2"]
         """
-        result =  "related_views = ["
+        result = "related_views = ["
         related_count = 0
         child_list = self.find_child_list(a_table_def)
         for each_child in child_list:
             related_count += 1
-            if (related_count > 1):
+            if related_count > 1:
                 result += ", "
             result += each_child.fullname + self.model_name(each_child)
-        """
-        if (each_table.name == "Customer"):
-            result += "OrderModelView"
-        elif (each_table.name == "Order"):
-            result += "OrderDetailModelView"
-        elif (each_table.name == "Product"):
-            result += "OrderDetailModelView"
-        """
         result += "]\n"
         return result
 
-
-
-    def find_child_list(self, a_table_def):
+    def find_child_list(self, a_table_def: TableModelInstance) -> list:
         """
-            Returns list of models w/ fKey to each_table
+            Returns list of models w/ fKey to a_table_def
 
             Not super efficient
                 pass entire table list for each table
                 ok until very large schemas
+
+            Parameters
+                argument1 a_table_def - TableModelInstance
+
+            Returns
+                list of models w/ fKey to each_table
         """
         child_list = []
         all_tables = a_table_def.metadata.tables
-        all_tables_items = all_tables.items()
         for each_possible_child_tuple in all_tables.items():
             each_possible_child = each_possible_child_tuple[1]
             parents = each_possible_child.foreign_keys
-            # if (a_table_def.name == "Customer" and each_possible_child.name == "Order"):
+            # if (a_table_def.name == "Customer" and
+            #   each_possible_child.name == "Order"):
             #    print (a_table_def)
             for each_parent in parents:
                 each_parent_name = each_parent.target_fullname
                 loc_dot = each_parent_name.index(".")
                 each_parent_name = each_parent_name[0:loc_dot]
-                if (each_parent_name == a_table_def.name):
+                if each_parent_name == a_table_def.name:
                     child_list.append(each_possible_child)
         return child_list
 
-
-
-    def model_name(self, a_table_name):  # override as req'd
+    def model_name(self, a_table_name: str):  # override as req'd
         """
-            returns model_name, defaulted to "ModelView"
+            returns view model_name for a_table_name, defaulted to "ModelView"
 
             intended for subclass override, for custom views
+
+            Parameters
+                argument1 a_table_name - str
+
+            Returns
+                view model_name for a_table_name, defaulted to "ModelView"
         """
         return "ModelView"
 
-
-    def favorite_column_name(self, a_table_def) -> str:
+    def favorite_column_name(self, a_table_def: TableModelInstance) -> str:
         """
             returns string of first column that is...
-                named <favorite_name> (default to "name"),
-                containing <favorite_name>
+                named <favorite_name> (default to "name"), else
+                containing <favorite_name>, else
                 (or first column)
+
+            Parameters
+                argument1 a_table_name - str
+
+            Returns
+                string of column name that is favorite (e.g., first in list)
         """
         favorite_names = self.favorite_name()
         for each_favorite_name in favorite_names:
             columns = a_table_def.columns
             for each_column in columns:
                 col_name = each_column.name.lower()
-                if (col_name == each_favorite_name):
+                if col_name == each_favorite_name:
                     return each_column.name
             for each_column in columns:
                 col_name = each_column.name.lower()
-                if (each_favorite_name in col_name):
+                if each_favorite_name in col_name:
                     return each_column.name
         for each_column in columns:  # no favorites, just return 1st
             return each_column.name
 
-
-    def favorite_name(self):
+    def favorite_name(self) -> str:
         """
             returns the substring used to find favorite column name
 
             override per language, db conventions
 
-            eg, 
+            eg,
                 name in English
                 nom in French
         """
         return ["nom", "description"]
 
+    def process_module_end(self, a_metadata_tables: MetaDataTables) -> str:
+        """
+            returns the last few lines
 
-
-    def process_module_end(self, a_metadata_tables):
-        result = "#  " + str(len(a_metadata_tables)) + " table(s) in model, " + \
-            str(self.num_pages_generated) + " page(s) generated\n\n"
+            comments - # tables etc
+        """
+        result = (
+            "#  "
+            + str(len(a_metadata_tables))
+            + " table(s) in model, "
+            + str(self.num_pages_generated)
+            + " page(s) generated\n\n"
+        )
         return result
