@@ -69,7 +69,7 @@ flask run
 
 The main code is `build_views/build_views_base.py`.
 
-Overrides for customization are in `build_views/build_views.py`, which is invoked by `build_views_file.py`
+It is extended by its subclass `build_views/build_views.py` for customizations, which is invoked by `build_views_file.py`
 
 ## Screenshot
     
