@@ -13,7 +13,13 @@ FAB requires that you build a `views.py` file.  This project seeks generated thi
 
 1. Generate `views.py` with 1 class per (not ab_) table
 
-    a. "Favorite" fields (contains name) first
+    a. "Favorite" field (called "name", or contains "name") first
+          
+          Eg, List of Products - ProductName is more interesting than ProductId, so show it first
+    
+    b. Join Fields (join in parents' favorite field)
+          
+          Eg, List of Order + OrderDetails: show ProductName (not id)
 
     b. Numeric keyfields last
 
