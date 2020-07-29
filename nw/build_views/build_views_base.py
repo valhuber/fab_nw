@@ -2,7 +2,7 @@
 """Generates FAB view files from db model.
 
 This is the super class
-    Use build_views, and provide overides as required.
+    Extended by build_views, for overides as required.
 
 Discussion 7/28
     Code cleanup: flake8, black (now activated, done?)
@@ -12,8 +12,9 @@ Discussion 7/28
         Needs discussion FIXME
             This depends on dir location of app (its __init__)
             to obtain the db.
-
-            Will that work in cmd line?  Is there a better way to get db?
+                Will that work in cmd line?  Is there a better way to get db?
+            Also, the options are sometimes code, not simple strings
+                E.g., model_name might depend on table_name
 
 To run:
     1. Generate model (consider https://pypi.org/project/sqlacodegen/)
@@ -383,7 +384,7 @@ class BuildViewsBase(object):
 
     def favorite_name(self) -> str:
         """
-            returns the substring used to find favorite column name
+            returns array of substrings used to find favorite column name
 
             override per language, db conventions
 
