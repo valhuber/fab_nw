@@ -7,7 +7,24 @@ This is a fab project for nw (sqllite). It contains the generation code (work in
 ## Background
 [Flask Application Builder (FAB)](https://github.com/dpgaspar/Flask-AppBuilder) provides a rapid means for building web pages for database apps, based on Python and Flask ([QuickStart here](https://sites.google.com/view/app-logic-server/python-fab)).
 
-FAB requires that you build a `views.py` file.  This project seeks generated this file from the model, to save time and reduce learning curve.
+FAB inputs are a `models.py` file, and a `views.py` file.  You can build models with tools like [sqlacodegen](https://www.google.com/url?q=https%3A%2F%2Fpypi.org%2Fproject%2Fsqlacodegen%2F&sa=D&sntz=1&usg=AFQjCNHZ3ERjfnSO8MA8V20gzLjfeBaIxw).
+
+The `view.py` file consists of segments like this, one for each page:
+```
+class OrderModelView(ModelView):
+   datamodel = SQLAInterface(Order)
+   list_columns = ["ShipName", "Customer.CompanyName", "OrderDate", "RequiredDate", "Id", "EmployeeId", "CustomerId"]
+   show_columns = ["ShipName", "Customer.CompanyName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
+   edit_columns = ["ShipName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
+   add_columns = ["ShipName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
+   related_views = [OrderDetailModelView]
+
+appbuilder.add_view(
+      OrderModelView, "Order List", icon="fa-folder-open-o", category="Menu")
+```
+
+
+This project seeks to generate this file from the model, to save time and reduce learning curve.
 
 ## Key Features
 
