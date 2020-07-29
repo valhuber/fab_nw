@@ -84,6 +84,8 @@ class BuildViewsBase(object):
         """
             Returns a string of views.py content
 
+            This is the main entry / starting point.
+
             Parameters:
                 argument1 (SqlAEngine): opened sqlA db
         """
@@ -98,6 +100,8 @@ class BuildViewsBase(object):
     def generate_module_imports(self) -> str:
         """
             Returns a string of views.py imports
+
+            (first portion of views.py file)
         """
         result = "from flask_appbuilder import ModelView\n"
         result += "from flask_appbuilder.models.sqla.interface import SQLAInterface\n"
@@ -110,8 +114,11 @@ class BuildViewsBase(object):
         """
             Generate class and add_view for given table.
 
-            These must be children first, so "related_views" compile.
-                We therefore recurse for children first.
+            These must be ordered children first,
+            so view.py compiles properly
+            ("related_views" would otherwise fail to compile).
+
+            We therefore recurse for children first.
 
             Parameters
                 argument1 a_table_def - TableModelInstance
@@ -163,8 +170,8 @@ class BuildViewsBase(object):
         """
             Generate list_columns = [...]
 
-            These must be children first, so "related_views" compile.
-                We therefore recurse for children first.
+            These must be children first, so "related_views" compile.\n
+            We therefore recurse for children first.
 
             Parameters
                 argument1 a_table_def - TableModelInstance
@@ -189,6 +196,11 @@ class BuildViewsBase(object):
         Generates statements like:
 
             list_columns =["Id", "Product.ProductName", ... "Id"]
+
+            This is *not* simply a list of columms:
+                1. favorite column first,
+                2. then join (parent) columns, with predictive joins
+                3. and id fields at the end.
 
             Parameters
                 argument1 a_table_def - TableModelInstance
@@ -245,9 +257,9 @@ class BuildViewsBase(object):
 
     def predictive_join_columns(self, a_table_def: TableModelInstance) -> set:
         """
-        Generates statements like:
+        Generates set of predictive join column name:
 
-            list_columns =["Id", "Product.ProductName", ... "Id"]
+            (Parent1.FavoriteColumn, Parent2.FavoriteColumn, ...)
 
             Parameters
                 argument1 a_table_def - TableModelInstance
@@ -257,7 +269,7 @@ class BuildViewsBase(object):
         """
         result = set()
         foreign_keys = a_table_def.foreign_keys
-        if a_table_def.name == "OrderDetail":
+        if a_table_def.name == "OrderDetail":  # for debug
             log.debug("predictive_joins for: " + a_table_def.name)
         for each_foreign_key in foreign_keys:
             each_parent_name = each_foreign_key.target_fullname
