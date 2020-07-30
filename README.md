@@ -7,9 +7,12 @@ This is a fab project for a sqlite version northwind (nw). The project contains 
 ## Background
 [Flask Application Builder (FAB)](https://github.com/dpgaspar/Flask-AppBuilder) provides a rapid means for building web pages for database apps, based on Python and Flask ([QuickStart here](https://sites.google.com/view/app-logic-server/python-fab)).
 
-FAB inputs are a `models.py` file, and a `views.py` file.  You can build models with tools like [sqlacodegen](https://www.google.com/url?q=https%3A%2F%2Fpypi.org%2Fproject%2Fsqlacodegen%2F&sa=D&sntz=1&usg=AFQjCNHZ3ERjfnSO8MA8V20gzLjfeBaIxw).
+FAB inputs are:
 
-The `view.py` file consists of segments like this, one for each page:
+1. `models.py` file - you can build models with tools like [sqlacodegen](https://www.google.com/url?q=https%3A%2F%2Fpypi.org%2Fproject%2Fsqlacodegen%2F&sa=D&sntz=1&usg=AFQjCNHZ3ERjfnSO8MA8V20gzLjfeBaIxw).
+
+1. `views.py` file - it consists of segments like this, one for each page:
+
 ```
 class OrderModelView(ModelView):
    datamodel = SQLAInterface(Order)
@@ -24,7 +27,7 @@ appbuilder.add_view(
 ```
 
 
-This project seeks to generate this file from the model, to save time and reduce learning curve.
+This project generates the `views.py` file from the `models.py` file, to save time and reduce learning curve.
 
 ## Key Features
 
