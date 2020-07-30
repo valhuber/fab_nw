@@ -77,7 +77,7 @@ Note: Windows Powershell requires privileges as described [here](https://docs.mi
 
 ## Generate
 
-Then, in VSCode, open the file `build_views_file.py`, and run it (e.g, under the debugger).
+Then, in VSCode, open the file `fab_views_gen.py`, and run it (e.g, under the debugger) using the launch config `FAB Views Gen`.
 
 Copy the console output over the `app/views.py` file
 
@@ -95,7 +95,7 @@ flask run
 
 The main code is `build_views/build_views_base.py`.
 
-For customizations, it is extended by its subclass `build_views/build_views.py`, which is invoked by `build_views_file.py`
+For customizations, it is extended by its subclass `build_views/build_views.py`, which is invoked by `fab_views_gen.py.py`
 
 ## Screenshot
     
