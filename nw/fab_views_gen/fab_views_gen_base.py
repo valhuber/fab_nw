@@ -10,11 +10,13 @@ Discussion 7/28
     Annotations (done)
     Command line, using click (but, customization via subclass)
         Needs discussion FIXME
-            This depends on dir location of app (its __init__)
-            to obtain the db.
-                Will that work in cmd line?  Is there a better way to get db?
+            fab_views_gen_run depends on dir location of app
+            to obtain the models (from app.models import *).
+                Will that work in cmd line?  Is there a better way?
             Also, the options are sometimes code, not simple strings
                 E.g., model_name might depend on table_name
+        Also discuss - how will fab user discover fab_views_gen?
+            Flask-AppBuilder-Skeleton includes reference?  or code itself??
 
 To run:
     1. Generate model (consider https://pypi.org/project/sqlacodegen/)
@@ -22,7 +24,7 @@ To run:
         b. Hand-edit classes, e.g.,
             not: def Customer(Model)
             but: def Customer(BaseMixin, Model)
-    2. Run build_views_file.py
+    2. Run fab_views_gen_run.py
     3. Copy console contents to your app/views.py file
     4. cd nw; flask run
 
