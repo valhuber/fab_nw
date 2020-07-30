@@ -22,7 +22,17 @@
             }
         },
         {
-            "name": "NW: Flask",
+            "name": "X - FAILS FAB Views Gen Run",
+            "type": "python",
+            "request": "launch",
+            "program": "nw/fab_views_gen_run_fails.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceRoot}"
+            }
+        },
+        {
+            "name": "NW App (Flask)",
             "type": "python",
             "request": "launch",
             "module": "flask",

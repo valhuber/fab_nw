@@ -331,9 +331,9 @@ class FabViewsGenBase(object):
         for each_possible_child_tuple in all_tables.items():
             each_possible_child = each_possible_child_tuple[1]
             parents = each_possible_child.foreign_keys
-            # if (a_table_def.name == "Customer" and
-            #   each_possible_child.name == "Order"):
-            #    print (a_table_def)
+            if (a_table_def.name == "Customer" and 
+                    each_possible_child.name == "Order"):
+                print (a_table_def)
             for each_parent in parents:
                 each_parent_name = each_parent.target_fullname
                 loc_dot = each_parent_name.index(".")
