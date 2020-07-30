@@ -1,7 +1,7 @@
 # fab_nw
 Generates Flask Application Builder `views.py` file - to build a __multi-page__ app (1 page per table) of __multi-table__ pages (includes `related_views` for related child data). 
 
-This is a fab project for a sqlite version northwind (nw). The project contains the _Fab Views Gen_ code (work in progress - see Explore, below), along with the nw project for illustration and testing.
+This is a fab project for a sqlite version northwind (nw). The project contains the __Fab Views Gen__ code (work in progress - see Explore, below), along with the nw project for illustration and testing.
 
 
 ## Background
@@ -13,10 +13,10 @@ The `view.py` file consists of segments like this, one for each page:
 ```
 class OrderModelView(ModelView):
    datamodel = SQLAInterface(Order)
-   list_columns = ["ShipName", "Customer.CompanyName", "OrderDate", "RequiredDate", "Id", "EmployeeId", "CustomerId"]
-   show_columns = ["ShipName", "Customer.CompanyName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
-   edit_columns = ["ShipName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
-   add_columns = ["ShipName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
+   list_columns = ["ShipName", "Customer.CompanyName", ... "EmployeeId", "CustomerId"]
+   show_columns = ["ShipName", "Customer.CompanyName", "OrderDate", ... "ShipCountry", "Id", "EmployeeId", "CustomerId"]
+   edit_columns = ["ShipName", "OrderDate",... "ShipCountry", "Id", "EmployeeId", "CustomerId"]
+   add_columns = ["ShipName", "OrderDate", ... "ShipCountry", "Id", "EmployeeId", "CustomerId"]
    related_views = [OrderDetailModelView]
 
 appbuilder.add_view(
@@ -77,9 +77,9 @@ Note: Windows Powershell requires privileges as described [here](https://docs.mi
 
 ## Generate
 
-Then, in VSCode, open the file `fab_views_gen.py`, and run it (e.g, under the debugger) using the launch config `FAB Views Gen`.
+Then, in VSCode, open the file `fab_views_gen_run.py`, and run it (e.g, under the debugger) using the launch config `FAB Views Gen Run`.
 
-Copy the console output over the `app/views.py` file
+Copy the console output over the `app/views.py` file.
 
 
 ## Run
@@ -93,9 +93,9 @@ flask run
 
 ## Explore
 
-The main code is `build_views/build_views_base.py`.
+The main code is `fab_views_gen/fab_views_gen_base.py`.
 
-For customizations, it is extended by its subclass `build_views/build_views.py`, which is invoked by `fab_views_gen.py.py`
+For customizations, it is extended by its subclass `fab_views_gen/fab_views_gen.py`, which is invoked by `fab_views_gen_run.py`
 
 ## Screenshot
     
