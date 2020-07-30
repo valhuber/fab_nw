@@ -60,9 +60,8 @@ import logging
 import datetime
 from typing import NewType
 
-MetaDataTables = NewType('MetaDataTables', object)
-TableModelInstance = NewType('TableModelInstance', object)
-SqlAEngine = NewType('SqlAEngine', object)
+MetaData = NewType('MetaData', object)
+MetaDataTable = NewType('MetaDataTable', object)
 
 
 log = logging.getLogger(__name__)
@@ -83,16 +82,16 @@ class FabViewsGenBase(object):
     _tables_generated = set()  # to address "generate children first"
     num_pages_generated = 0
 
-    def generate_view(self, a_db: SqlAEngine) -> str:
+    def generate_view(self, a_metadata: MetaData) -> str:
         """
             Returns a string of views.py content
 
             This is the main entry / starting point.
 
             Parameters:
-                argument1 (SqlAEngine): opened sqlA db
+                argument1 a_metadata - MetaData (e.g, metadata = MetaData())
         """
-        meta_tables = a_db.tables  # a_db.Model.metadata.tables
+        meta_tables = a_metadata.tables  # a_db.Model.metadata.tables
         self._result += self.generate_module_imports()
         for each_table in meta_tables.items():
             each_result = self.process_each_table(each_table[1])
@@ -113,7 +112,7 @@ class FabViewsGenBase(object):
         result += "\n"
         return result
 
-    def process_each_table(self, a_table_def: TableModelInstance) -> str:
+    def process_each_table(self, a_table_def: MetaDataTable) -> str:
         """
             Generate class and add_view for given table.
 
@@ -169,7 +168,7 @@ class FabViewsGenBase(object):
             )
             return result + "\n\n"
 
-    def list_columns(self, a_table_def: TableModelInstance) -> str:
+    def list_columns(self, a_table_def: MetaDataTable) -> str:
         """
             Generate list_columns = [...]
 
@@ -184,16 +183,16 @@ class FabViewsGenBase(object):
         """
         return self.gen_columns(a_table_def, "list_columns = [", 2, 4)
 
-    def show_columns(self, a_table_def: TableModelInstance):
+    def show_columns(self, a_table_def: MetaDataTable):
         return self.gen_columns(a_table_def, "show_columns = [", 99, 999)
 
-    def edit_columns(self, a_table_def: TableModelInstance):
+    def edit_columns(self, a_table_def: MetaDataTable):
         return self.gen_columns(a_table_def, "edit_columns = [", 99, 999)
 
-    def add_columns(self, a_table_def: TableModelInstance):
+    def add_columns(self, a_table_def: MetaDataTable):
         return self.gen_columns(a_table_def, "add_columns = [", 99, 999)
 
-    def gen_columns(self, a_table_def: TableModelInstance,
+    def gen_columns(self, a_table_def: MetaDataTable,
                     a_view_type: int, a_max_joins: int, a_max_columns: int):
         """
         Generates statements like:
@@ -258,7 +257,7 @@ class FabViewsGenBase(object):
         result += "]\n"
         return result
 
-    def predictive_join_columns(self, a_table_def: TableModelInstance) -> set:
+    def predictive_join_columns(self, a_table_def: MetaDataTable) -> set:
         """
         Generates set of predictive join column name:
 
@@ -283,7 +282,7 @@ class FabViewsGenBase(object):
             result.add(each_parent_name + "." + favorite_column_name)
         return result
 
-    def related_views(self, a_table_def: TableModelInstance) -> str:
+    def related_views(self, a_table_def: MetaDataTable) -> str:
         """
             Generates statments like
                 related_views = ["Child1", "Child2"]
@@ -313,7 +312,7 @@ class FabViewsGenBase(object):
         result += "]\n"
         return result
 
-    def find_child_list(self, a_table_def: TableModelInstance) -> list:
+    def find_child_list(self, a_table_def: MetaDataTable) -> list:
         """
             Returns list of models w/ fKey to a_table_def
 
@@ -357,7 +356,7 @@ class FabViewsGenBase(object):
         """
         return "ModelView"
 
-    def favorite_column_name(self, a_table_def: TableModelInstance) -> str:
+    def favorite_column_name(self, a_table_def: MetaDataTable) -> str:
         """
             returns string of first column that is...
                 named <favorite_name> (default to "name"), else
@@ -396,7 +395,7 @@ class FabViewsGenBase(object):
         """
         return ["nom", "description"]
 
-    def process_module_end(self, a_metadata_tables: MetaDataTables) -> str:
+    def process_module_end(self, a_metadata_tables: MetaData) -> str:
         """
             returns the last few lines
 
