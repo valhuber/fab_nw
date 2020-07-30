@@ -9,9 +9,9 @@ This is a fab project for a sqlite version northwind (nw). The project contains 
 
 FAB inputs are:
 
-1. `models.py` file - you can build models with tools like [sqlacodegen](https://www.google.com/url?q=https%3A%2F%2Fpypi.org%2Fproject%2Fsqlacodegen%2F&sa=D&sntz=1&usg=AFQjCNHZ3ERjfnSO8MA8V20gzLjfeBaIxw).
+1. `models.py` file - describes your database tables.  You can build models with tools like [sqlacodegen](https://www.google.com/url?q=https%3A%2F%2Fpypi.org%2Fproject%2Fsqlacodegen%2F&sa=D&sntz=1&usg=AFQjCNHZ3ERjfnSO8MA8V20gzLjfeBaIxw).
 
-1. `views.py` file - it consists of segments like this, one for each page:
+1. `views.py` file - used by fab to generate pages.  It consists of segments like this, one for each page:
 
 ```
 class OrderModelView(ModelView):
