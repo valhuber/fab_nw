@@ -90,7 +90,7 @@ class BuildViewsBase(object):
             Parameters:
                 argument1 (SqlAEngine): opened sqlA db
         """
-        meta_tables = a_db.Model.metadata.tables
+        meta_tables = a_db.tables  # a_db.Model.metadata.tables
         self._result += self.generate_module_imports()
         for each_table in meta_tables.items():
             each_result = self.process_each_table(each_table[1])

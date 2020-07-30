@@ -22,6 +22,16 @@
             }
         },
         {
+            "name": "FAB Views Gen",
+            "type": "python",
+            "request": "launch",
+            "program": "nw/fabviewsgen.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceRoot}"
+            }
+        },
+        {
             "name": "NW: Flask",
             "type": "python",
             "request": "launch",
