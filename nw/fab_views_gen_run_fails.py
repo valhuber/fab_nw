@@ -20,12 +20,13 @@ engine = sqlalchemy.create_engine(conn_string)
 connection = engine.connect()
 metadata = MetaData()
 """
-    FIXME - finds all tables, NOT foreign_keys
-        This approach does NOT use the fab "app" (see line 3)
+Comm    FIXME - finds all tables, BUT NOT foreign_keys
+        This approach gets metadata from sql, NOT app (see line 3)
             This is good - we can run "outside" the project
                 Eg, cmd line from pip
-            Instead, it opens the metadata itself (2 lines above)
+            Instead, it opens the metadata using sqla (2 lines above)
         But it fails - no foreign keys are in metadata (so no related_views)
+            This is a BLOCKER for reasonable packagning
 """
 metadata.reflect(bind=engine, resolve_fks=True)
 
