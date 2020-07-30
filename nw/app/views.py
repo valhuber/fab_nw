@@ -1,18 +1,10 @@
-# default views.py, generated at: 2020-07-28 16:40:13.320149
+# default views.py, generated at: 2020-07-30 06:04:59.089562
 
 from flask_appbuilder import ModelView
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 from . import appbuilder, db
 from .models import *
 
-# skip admin table: ab_permission
-# skip admin table: ab_view_menu
-# skip admin table: ab_permission_view_role
-# skip admin table: ab_role
-# skip admin table: ab_permission_view
-# skip admin table: ab_user_role
-# skip admin table: ab_user
-# skip admin table: ab_register_user
 
 
 
@@ -31,10 +23,25 @@ appbuilder.add_view(
 
 
 
+class CustomerModelView(ModelView):
+   datamodel = SQLAInterface(Customer)
+   list_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "Id"]
+   show_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
+   edit_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
+   add_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
+   related_views = []
+
+appbuilder.add_view(
+      CustomerModelView, "Customer List", icon="fa-folder-open-o", category="Menu")
+
+
+
+
+
 class CustomerCustomerDemoModelView(ModelView):
    datamodel = SQLAInterface(CustomerCustomerDemo)
-   list_columns = ["Id", "Customer.CompanyName", "CustomerTypeId"]
-   show_columns = ["Id", "Customer.CompanyName", "CustomerTypeId"]
+   list_columns = ["Id", "CustomerTypeId"]
+   show_columns = ["Id", "CustomerTypeId"]
    edit_columns = ["Id", "CustomerTypeId"]
    add_columns = ["Id", "CustomerTypeId"]
    related_views = []
@@ -44,51 +51,6 @@ appbuilder.add_view(
 
 
 
-
-
-class OrderDetailModelView(ModelView):
-   datamodel = SQLAInterface(OrderDetail)
-   list_columns = ["Id", "Order.ShipName", "Product.ProductName", "UnitPrice", "OrderId", "ProductId"]
-   show_columns = ["Id", "Order.ShipName", "Product.ProductName", "UnitPrice", "Quantity", "Discount", "OrderId", "ProductId"]
-   edit_columns = ["Id", "UnitPrice", "Quantity", "Discount", "OrderId", "ProductId"]
-   add_columns = ["Id", "UnitPrice", "Quantity", "Discount", "OrderId", "ProductId"]
-   related_views = []
-
-appbuilder.add_view(
-      OrderDetailModelView, "OrderDetail List", icon="fa-folder-open-o", category="Menu")
-
-
-
-
-
-class OrderModelView(ModelView):
-   datamodel = SQLAInterface(Order)
-   list_columns = ["ShipName", "Customer.CompanyName", "OrderDate", "RequiredDate", "Id", "EmployeeId", "CustomerId"]
-   show_columns = ["ShipName", "Customer.CompanyName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
-   edit_columns = ["ShipName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
-   add_columns = ["ShipName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
-   related_views = [OrderDetailModelView]
-
-appbuilder.add_view(
-      OrderModelView, "Order List", icon="fa-folder-open-o", category="Menu")
-
-
-
-
-
-class CustomerModelView(ModelView):
-   datamodel = SQLAInterface(Customer)
-   list_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "Id"]
-   show_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
-   edit_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
-   add_columns = ["CompanyName", "ContactName", "ContactTitle", "Address", "City", "Region", "PostalCode", "Country", "Phone", "Fax", "Id"]
-   related_views = [CustomerCustomerDemoModelView, OrderModelView]
-
-appbuilder.add_view(
-      CustomerModelView, "Customer List", icon="fa-folder-open-o", category="Menu")
-
-
-# table already generated per recursion: CustomerCustomerDemo
 
 
 class CustomerDemographicModelView(ModelView):
@@ -106,12 +68,27 @@ appbuilder.add_view(
 
 
 
+class EmployeeModelView(ModelView):
+   datamodel = SQLAInterface(Employee)
+   list_columns = ["LastName", "FirstName", "Title", "TitleOfCourtesy", "Id"]
+   show_columns = ["LastName", "FirstName", "Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City", "Region", "PostalCode", "Country", "HomePhone", "Extension", "Photo", "Notes", "ReportsTo", "PhotoPath", "Id"]
+   edit_columns = ["LastName", "FirstName", "Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City", "Region", "PostalCode", "Country", "HomePhone", "Extension", "Photo", "Notes", "ReportsTo", "PhotoPath", "Id"]
+   add_columns = ["LastName", "FirstName", "Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City", "Region", "PostalCode", "Country", "HomePhone", "Extension", "Photo", "Notes", "ReportsTo", "PhotoPath", "Id"]
+   related_views = []
+
+appbuilder.add_view(
+      EmployeeModelView, "Employee List", icon="fa-folder-open-o", category="Menu")
+
+
+
+
+
 class EmployeeTerritoryModelView(ModelView):
    datamodel = SQLAInterface(EmployeeTerritory)
-   list_columns = ["Id", "Territory.TerritoryDescription", "Employee.LastName", "TerritoryId", "EmployeeId"]
-   show_columns = ["Id", "Territory.TerritoryDescription", "Employee.LastName", "TerritoryId", "EmployeeId"]
-   edit_columns = ["Id", "TerritoryId", "EmployeeId"]
-   add_columns = ["Id", "TerritoryId", "EmployeeId"]
+   list_columns = ["Id", "EmployeeId", "TerritoryId"]
+   show_columns = ["Id", "EmployeeId", "TerritoryId"]
+   edit_columns = ["Id", "EmployeeId", "TerritoryId"]
+   add_columns = ["Id", "EmployeeId", "TerritoryId"]
    related_views = []
 
 appbuilder.add_view(
@@ -121,19 +98,34 @@ appbuilder.add_view(
 
 
 
-class EmployeeModelView(ModelView):
-   datamodel = SQLAInterface(Employee)
-   list_columns = ["LastName", "FirstName", "Title", "TitleOfCourtesy", "Id"]
-   show_columns = ["LastName", "FirstName", "Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City", "Region", "PostalCode", "Country", "HomePhone", "Extension", "Photo", "Notes", "ReportsTo", "PhotoPath", "Id"]
-   edit_columns = ["LastName", "FirstName", "Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City", "Region", "PostalCode", "Country", "HomePhone", "Extension", "Photo", "Notes", "ReportsTo", "PhotoPath", "Id"]
-   add_columns = ["LastName", "FirstName", "Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City", "Region", "PostalCode", "Country", "HomePhone", "Extension", "Photo", "Notes", "ReportsTo", "PhotoPath", "Id"]
-   related_views = [EmployeeTerritoryModelView]
+class OrderModelView(ModelView):
+   datamodel = SQLAInterface(Order)
+   list_columns = ["ShipName", "OrderDate", "RequiredDate", "ShippedDate", "Id", "EmployeeId", "CustomerId"]
+   show_columns = ["ShipName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
+   edit_columns = ["ShipName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
+   add_columns = ["ShipName", "OrderDate", "RequiredDate", "ShippedDate", "ShipVia", "Freight", "ShipAddress", "ShipCity", "ShipRegion", "ShipPostalCode", "ShipCountry", "Id", "EmployeeId", "CustomerId"]
+   related_views = []
 
 appbuilder.add_view(
-      EmployeeModelView, "Employee List", icon="fa-folder-open-o", category="Menu")
+      OrderModelView, "Order List", icon="fa-folder-open-o", category="Menu")
 
 
-# table already generated per recursion: EmployeeTerritory# table already generated per recursion: Order# table already generated per recursion: OrderDetail# table already generated per recursion: OrderDetail
+
+
+
+class OrderDetailModelView(ModelView):
+   datamodel = SQLAInterface(OrderDetail)
+   list_columns = ["Id", "UnitPrice", "Quantity", "Discount", "OrderId", "ProductId"]
+   show_columns = ["Id", "UnitPrice", "Quantity", "Discount", "OrderId", "ProductId"]
+   edit_columns = ["Id", "UnitPrice", "Quantity", "Discount", "OrderId", "ProductId"]
+   add_columns = ["Id", "UnitPrice", "Quantity", "Discount", "OrderId", "ProductId"]
+   related_views = []
+
+appbuilder.add_view(
+      OrderDetailModelView, "OrderDetail List", icon="fa-folder-open-o", category="Menu")
+
+
+
 
 
 class ProductModelView(ModelView):
@@ -142,7 +134,7 @@ class ProductModelView(ModelView):
    show_columns = ["ProductName", "QuantityPerUnit", "UnitPrice", "UnitsInStock", "UnitsOnOrder", "ReorderLevel", "Discontinued", "Id", "SupplierId", "CategoryId"]
    edit_columns = ["ProductName", "QuantityPerUnit", "UnitPrice", "UnitsInStock", "UnitsOnOrder", "ReorderLevel", "Discontinued", "Id", "SupplierId", "CategoryId"]
    add_columns = ["ProductName", "QuantityPerUnit", "UnitPrice", "UnitsInStock", "UnitsOnOrder", "ReorderLevel", "Discontinued", "Id", "SupplierId", "CategoryId"]
-   related_views = [OrderDetailModelView]
+   related_views = []
 
 appbuilder.add_view(
       ProductModelView, "Product List", icon="fa-folder-open-o", category="Menu")
@@ -193,7 +185,7 @@ appbuilder.add_view(
       SupplierModelView, "Supplier List", icon="fa-folder-open-o", category="Menu")
 
 
-# table already generated per recursion: EmployeeTerritory
+
 
 
 class TerritoryModelView(ModelView):
@@ -202,10 +194,18 @@ class TerritoryModelView(ModelView):
    show_columns = ["TerritoryDescription", "Id", "RegionId"]
    edit_columns = ["TerritoryDescription", "Id", "RegionId"]
    add_columns = ["TerritoryDescription", "Id", "RegionId"]
-   related_views = [EmployeeTerritoryModelView]
+   related_views = []
 
 appbuilder.add_view(
       TerritoryModelView, "Territory List", icon="fa-folder-open-o", category="Menu")
 
 
+# skip admin table: ab_permission
+# skip admin table: ab_permission_view
+# skip admin table: ab_view_menu
+# skip admin table: ab_permission_view_role
+# skip admin table: ab_role
+# skip admin table: ab_register_user
+# skip admin table: ab_user
+# skip admin table: ab_user_role
 #  21 table(s) in model, 13 page(s) generated

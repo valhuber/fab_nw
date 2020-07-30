@@ -1,5 +1,5 @@
 
-from nw.build_views.build_views_base import BuildViewsBase
+from nw.fab_views_gen.fab_views_gen_base import FabViewsGenBase
 
 import logging
 from typing import NewType
@@ -10,9 +10,9 @@ log = logging.getLogger(__name__)
 log.debug("build_views (overrides here)")
 
 
-class BuildViews(BuildViewsBase):
+class FabViewsGen(FabViewsGenBase):
     """
-        @see build_views_base
+        @see fab_code_gen_base
 
         This extends it, to provide overrides as required
     """

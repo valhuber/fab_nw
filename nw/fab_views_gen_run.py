@@ -14,29 +14,21 @@ from sqlalchemy import create_engine, select, MetaData, Table
 
 from datetime import datetime
 
-from nw.build_views import build_views
+from nw.fab_views_gen import fab_views_gen
 
 
 log = logging.getLogger(__name__)
 log.debug("\n\nRunning: " + sys.argv[0] + "\n\n" + sys.version + "\n\n")
 
-conn_string = "sqlite:///nw/nw.db"  #  metadata
+conn_string = "sqlite:///nw/nw.db"  #  TODO - use config file, per cmd line args
 engine = sqlalchemy.create_engine(conn_string)
 
 connection = engine.connect()
 meta = MetaData()
 meta.reflect(bind=engine)
 
-items = meta.tables.items()
-for each_table in items:
-    o = each_table[1]
-    print("\nname", o.name)
-
-# base.metadata  metadata
-#  insp = reflection.Inspector.from_engine(engine)  #  compare to db
-
-view_builder = build_views.BuildViews()
-generated_view = view_builder.generate_view(meta)  #  fails (ab tables only)
+fab_views_gen = fab_views_gen.FabViewsGen()
+generated_view = fab_views_gen.generate_view(meta)
 
 log.debug("\n\nCompleted, generated views.py-->\n\n\n\n")
 print(generated_view)

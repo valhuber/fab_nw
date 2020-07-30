@@ -67,7 +67,7 @@ log = logging.getLogger(__name__)
 log.debug("BuildViewsBase loading...")
 
 
-class BuildViewsBase(object):
+class FabViewsGenBase(object):
     """
     Iterate over all tables, create view statements for each
     """

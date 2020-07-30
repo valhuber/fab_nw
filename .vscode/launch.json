@@ -12,20 +12,10 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "App Builder",
+            "name": "FAB Views Gen Run",
             "type": "python",
             "request": "launch",
-            "program": "nw/build_views_file.py",
-            "console": "integratedTerminal",
-            "env": {
-                "PYTHONPATH": "${workspaceRoot}"
-            }
-        },
-        {
-            "name": "FAB Views Gen",
-            "type": "python",
-            "request": "launch",
-            "program": "nw/fab_views_gen.py",
+            "program": "nw/fab_views_gen_run.py",
             "console": "integratedTerminal",
             "env": {
                 "PYTHONPATH": "${workspaceRoot}"
