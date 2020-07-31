@@ -102,7 +102,7 @@ class Order(BaseMixin, Model):
     Id = Column(Integer, primary_key=True)
     # CustomerId = Column(String(8000))
     CustomerId = Column(String(8000), ForeignKey("Customer.Id"), nullable=False)
-    Customer = relationship("Customer")
+    Customer = relationship(Customer)
     EmployeeId = Column(Integer, nullable=False)
     OrderDate = Column(String(8000))
     RequiredDate = Column(String(8000))

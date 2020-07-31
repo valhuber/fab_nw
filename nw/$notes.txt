@@ -5,3 +5,32 @@
 cd /Users/val/python/vsc/fab_nw ; env /Users/val/python/vsc/fab_nw/venv/bin/python3.8 /Users/val/.vscode/extensions/ms-python.python-2020.7.96456/pythonFiles/lib/python/debugpy/launcher 59007 -- -m flask run --no-debugger --no-reload 
 
 cd /Users/val/python/vsc/fab_nw ; env /Users/val/python/vsc/fab_nw/venv/bin/python3.8 /Users/val/.vscode/extensions/ms-python.python-2020.7.96456/pythonFiles/lib/python/debugpy/launcher 59007 -- -m flask run --debugger --reload
+
+
+
+CREATE TABLE IF NOT EXISTS "EmployeeTerritoryFK" 
+(
+  "Id" VARCHAR(8000) PRIMARY KEY, 
+  "EmployeeId" INTEGER NOT NULL, 
+  "TerritoryId" VARCHAR(8000) NULL,
+
+  FOREIGN KEY (EmployeeId) REFERENCES Employee(Id)
+);
+
+CREATE TABLE IF NOT EXISTS new 
+(
+  "Id" VARCHAR(8000) PRIMARY KEY, 
+  "EmployeeId" INTEGER NOT NULL, 
+  "TerritoryId" VARCHAR(8000) NULL,
+
+  FOREIGN KEY (EmployeeId) REFERENCES Employee(Id)
+  FOREIGN KEY (TerritoryId) REFERENCES Territory(Id)
+);
+
+insert into new select * from EmployeeTerritory;
+
+ALTER TABLE "EmployeeTerritory" RENAME TO "old";
+
+ALTER TABLE new RENAME TO "EmployeeTerritory";
+
+drop table old;

@@ -1,20 +1,22 @@
 import logging
-from app import db
-from app.models import *
-import random
-import string
+# not required: from app.models import *
 import sys
-
-from datetime import datetime
+import sqlalchemy
+import sqlalchemy.ext
+from sqlalchemy import MetaData
 
 from nw.fab_views_gen import fab_views_gen
 
-import logging
-
 log = logging.getLogger(__name__)
-log.debug("\n\nRunning: " + sys.argv[0] + "\n\n" + sys.version +"\n\n")
+log.debug("\n\nRunning: " + sys.argv[0] + "\n\n" + sys.version + "\n\n")
 
-metadata = db.Model.metadata   #  hmm.... depends on from app import db
+conn_string = "sqlite:///nw/nw.db"  #  TODO - use config file, per cmd line args
+engine = sqlalchemy.create_engine(conn_string)
+
+connection = engine.connect()
+metadata = MetaData()
+metadata.reflect(bind=engine, resolve_fks=True)
+
 fab_views_gen = fab_views_gen.FabViewsGen()
 generated_view = fab_views_gen.generate_view(metadata)
 

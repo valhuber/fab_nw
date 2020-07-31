@@ -5,27 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
-        },
-        {
             "name": "FAB Views Gen Run",
             "type": "python",
             "request": "launch",
             "program": "nw/fab_views_gen_run.py",
-            "console": "integratedTerminal",
-            "env": {
-                "PYTHONPATH": "${workspaceRoot}"
-            }
-        },
-        {
-            "name": "X - FAILS FAB Views Gen Run",
-            "type": "python",
-            "request": "launch",
-            "program": "nw/fab_views_gen_run_fails.py",
             "console": "integratedTerminal",
             "env": {
                 "PYTHONPATH": "${workspaceRoot}"
@@ -48,6 +31,13 @@
                 "--reload"
             ],
             "jinja": true
+        },
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
         }
 
     ]
