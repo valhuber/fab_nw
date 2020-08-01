@@ -1,3 +1,6 @@
+# OLD VERSION
+Please use fab-quickstart
+
 # fab_nw
 Generates Flask Application Builder `views.py` file - to build a __multi-page__ app (1 page per table) of __multi-table__ pages (includes `related_views` for related child data). 
 
