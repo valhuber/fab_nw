@@ -1,4 +1,3 @@
-
 from nw.fab_views_gen.fab_views_gen_base import FabViewsGenBase
 
 import logging
@@ -13,7 +12,6 @@ log.debug("build_views (overrides here)")
 class FabViewsGen(FabViewsGenBase):
     """
         @see fab_code_gen_base
-
         This extends it, to provide overrides as required
     """
 

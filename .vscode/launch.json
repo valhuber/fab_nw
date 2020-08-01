@@ -8,6 +8,16 @@
             "name": "FAB Views Gen Run",
             "type": "python",
             "request": "launch",
+            "program": "nw/fab_views_gen/run.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceRoot}"
+            }
+        },
+        {
+            "name": "ZZFAB Views Gen Run",
+            "type": "python",
+            "request": "launch",
             "program": "nw/fab_views_gen_run.py",
             "console": "integratedTerminal",
             "env": {
